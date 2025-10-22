@@ -126,5 +126,5 @@ This library is being extended to include...:
 
 ## License
 
-This work is open-source under the Apache licence.
+This work is open-source under the Apache license. See LICENCE and NOTICE for more details.
 

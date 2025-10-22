@@ -8,7 +8,7 @@ This project includes code from:
   Licensed under the Apache License, Version 2.0.
 
 The following file in this project is derived from that work and has been modified:
-  src/utils/data_parser.py
+  pycfx/library/tree_model_encoding.py
 
 Modifications © 2025 Aman Bilkhoo.
 
