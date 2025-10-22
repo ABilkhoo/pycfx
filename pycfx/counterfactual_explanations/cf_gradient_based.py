@@ -10,6 +10,7 @@ from pycfx.counterfactual_explanations.cf_generator import CounterfactualGenerat
 from pycfx.conformal.localised_conformal_lcp import SplitConformalPrediction
 from pycfx.conformal.losses_conformal import SetSizeLoss
 from pycfx.models.abstract_model import DifferentiableModel
+from pycfx.models.variational_autoencoder import VariationalAutoencoder
 
 import numpy as np
 from pathlib import Path
@@ -84,6 +85,33 @@ class SchutGenerator(GradientBasedGenerator):
     def setup(self, X_train: np.ndarray, y_train: np.ndarray, X_calib: np.ndarray, y_calib: np.ndarray):
         clf_loss = ClassificationLoss(backend=self.backend)
         self.optimisation_loop = DifferentiableOptimisation(self.model, self.input_properties, losses=[clf_loss], n_iter=self.n_iter, lr=self.lr, min_max_lambda=None, jsma=True)
+
+    def generate_counterfactual(self, x: np.ndarray, y_target: int):
+        return self.optimisation_loop.optimise_min(x, y_target)
+    
+
+class ReviseGenerator(GradientBasedGenerator):
+    """
+    REVISE: Joshi et al. "Towards realistic individual recourse and actionable explanations in black-box decision making systems." (2019).
+    """
+    # Distance + loss + latent VAE
+    def setup(self, X_train: np.ndarray, y_train: np.ndarray, X_calib: np.ndarray, y_calib: np.ndarray):
+        distance_loss = DistanceLoss(self.norm, self.mad, X_train, backend=self.backend)
+        clf_loss = ClassificationLoss(backend=self.backend)
+
+        vae_config = self.config.get("vae_config", {})
+        #Train VAE, save
+        encoder = VariationalAutoencoder(vae_config, self.input_properties)
+
+        if self.save_dir is not None:
+            encoder.load_or_train(self.save_dir / "vae", X_train, y_train, self.use_pregenerated) 
+        else:
+            encoder.train(X_train, y_train) 
+
+        # self.encoder = encoder
+
+        self.optimisation_loop = DifferentiableOptimisation(self.model, self.input_properties, losses=[clf_loss, distance_loss], n_iter=self.n_iter, lr=self.lr, min_max_lambda=self.min_max_lambda, latent_encoding=encoder,
+                                                                  losses_weights=[1, 1])
 
     def generate_counterfactual(self, x: np.ndarray, y_target: int):
         return self.optimisation_loop.optimise_min(x, y_target)
