@@ -11,3 +11,4 @@ tensorflow
 matplotlib
 tqdm
 xgboost
+pdoc
