@@ -1,0 +1,16 @@
+NOTICE
+------
+
+This project includes code from:
+
+  gurobi_machinelearning
+  https://github.com/Gurobi/gurobi-machinelearning/blob/main/pycfx/gurobi_ml/modeling/decision_tree/decision_tree_model.py
+  Licensed under the Apache License, Version 2.0.
+
+The following file in this project is derived from that work and has been modified:
+  src/utils/data_parser.py
+
+Modifications © 2025 Aman Bilkhoo.
+
+All other files in this project are also licensed under the Apache License, Version 2.0.
+See LICENSE for full terms.
