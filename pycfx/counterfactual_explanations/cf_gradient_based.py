@@ -7,8 +7,8 @@ from pycfx.datasets.input_properties import InputProperties
 from pycfx.counterfactual_explanations.differentiable.losses import DistanceLoss, ClassificationLoss, EnergyLoss
 from pycfx.counterfactual_explanations.differentiable.optimisation_loop import DifferentiableOptimisation
 from pycfx.counterfactual_explanations.cf_generator import CounterfactualGenerator
-from pycfx.conformal.localised_conformal_lcp import SplitConformalPrediction
-from pycfx.conformal.losses_conformal import SetSizeLoss
+from pycfx.conformal.localised_conformal_lcp import BaseLCP, SplitConformalPrediction
+from pycfx.conformal.losses_conformal import SetSizeLoss, SetSizeLossLCP
 from pycfx.models.abstract_model import DifferentiableModel
 
 import numpy as np
@@ -84,6 +84,25 @@ class SchutGenerator(GradientBasedGenerator):
     def setup(self, X_train: np.ndarray, y_train: np.ndarray, X_calib: np.ndarray, y_calib: np.ndarray):
         clf_loss = ClassificationLoss(backend=self.backend)
         self.optimisation_loop = DifferentiableOptimisation(self.model, self.input_properties, losses=[clf_loss], n_iter=self.n_iter, lr=self.lr, min_max_lambda=None, jsma=True)
+
+    def generate_counterfactual(self, x: np.ndarray, y_target: int):
+        return self.optimisation_loop.optimise_min(x, y_target)
+    
+class DifferentiableCONFEXGenerator(GradientBasedGenerator):
+    
+    def setup(self, X_train: np.ndarray, y_train: np.ndarray, X_calib: np.ndarray, y_calib: np.ndarray):
+        clf_loss = ClassificationLoss(backend=self.backend)
+        distance_loss = DistanceLoss(self.norm, self.mad, X_train, backend=self.backend)
+
+        conformal_config = self.config.get('conformal_config', {})
+        conformal = BaseLCP(self.model, self.input_properties, conformal_config, self.save_dir, self.use_pregenerated)
+        conformal.calibrate(X_calib, y_calib)
+        self.conformal = conformal
+
+        set_size_loss = SetSizeLossLCP(conformal, backend=self.backend)
+        
+        self.optimisation_loop = DifferentiableOptimisation(self.model, self.input_properties, losses=[clf_loss, distance_loss, set_size_loss], n_iter=self.n_iter, lr=self.lr, 
+                                                                  losses_weights=[1, 1, 1], retain_graph=True)
 
     def generate_counterfactual(self, x: np.ndarray, y_target: int):
         return self.optimisation_loop.optimise_min(x, y_target)
