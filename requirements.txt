@@ -1,0 +1,13 @@
+torch==2.6.0
+scikit-learn
+joblib
+gurobipy==11.0.3
+keras
+cfxplorer
+gurobi-machinelearning
+pandas
+ipykernel
+tensorflow
+matplotlib
+tqdm
+xgboost

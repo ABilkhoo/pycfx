@@ -6,8 +6,10 @@ With machine learning models being increasingly deployed in high-stakes scenario
 
 PyCFX includes a range of CFX generators and has out-of-the-box support for a range of models and CFX generators. PyCFX is fully documented, built to be extendable by those wishing to benchmark their own CFX generator or use their own models or datasets, or use custom metrics to benchmark generators with. In comparison with existing libraries, PyCFX is built to include proper handling of numeric, categorical and ordinal features, has support for MILP (mixed-integer linear programming) based generators, and includes conformal prediction for uncertainty quantification.
 
-See the example notebooks to get started! View the documentation here.
----
+See the example notebooks to get started! 
+View the documentation [here](https://abilkhoo.github.io/pycfx/).
+
+--
 
 ## Table of contents
 
@@ -24,10 +26,10 @@ See the example notebooks to get started! View the documentation here.
 
 ## Overview
 
-PyCFX was developed for use by Aman Bilkhoo for use in the paper "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Gurantees" [1]
+PyCFX was developed for use by Aman Bilkhoo for use in the paper "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees" [1]
 This library contains
 - Sample synthetic and tabular datasets
-- Model wrappers for PyTorch models, Keras models, SKLearn RandomForest, GradientBoosting and DecisionTree classifiers.
+- Model wrappers for PyTorch models, Keras models and SKLearn tree-based classifiers.
 - Classes for split conformal prediction and localised conformal prediction.
 - Counterfactual explanation generators (gradient-based, MILP-based, tree-based, plus more, some of which have leverage external implementations)
 - Benchmarker utilities and evaluation metrics
@@ -60,11 +62,13 @@ pycfx/
     ├── helpers/                             # helpers for constants and visualisation
     ├── library/                             # external code copied into this repo then modified, used for external generators or MILP encodings. See each file for origins.
     ├── models/                              # wrappers for a variety of Python models for use in this library.
+├── docs/                                    # documentation using pdoc
 ├── results/                                 # scripts and notebooks detailing the use of the CFX benchmarker.
 ├── tutorials/                               # quick-start with some visual examples
+
 ```
 
-See `results/readme.md` to reproduce the results from "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Gurantees"
+See `results/readme.md` to reproduce the results from "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees"
 
 ## Datasets, Models and Generators.
 
@@ -89,26 +93,29 @@ Models available:
 - Subclass `AbstractModel` to define your own model
 
 Generators available:
-- Differentiable
+- Differentiable generators:
     - [Wachter](https://arxiv.org/pdf/1711.00399)
     - [ECCCo](https://arxiv.org/abs/2312.10648)
-    - [Schut](https://arxiv.org/abs/2103.08951), 
-    - Support for PyTorch/Keras models.
-- MILP-based
-    - Min Distance CFX, 
-    - CONFEX CFXs [1]
-    - Support for PyTorch/Keras MLP and tree-based models
+    - [Schut](https://arxiv.org/abs/2103.08951)
+    - [Support for PyTorch/Keras models].
+- MILP-based generators:
+    - Min Distance CFX generator
+    - CONFEX generator [1]
+    - [Support for PyTorch/Keras MLP and tree-based models]
 - Other: 
     - Nearest-neighbour CFX,
-    - Support for all models.
-- External: FOCUS (uses [CFXplorer](https://github.com/kyosek/CFXplorer) for implementation), FeatureTweak (implementation used from https://github.com/upura/featureTweakPy/blob/master/featureTweakPy.py), with support for SKLearn tree based classifiers.
+    - [Support for all models].
+- External: 
+    - FOCUS (uses [CFXplorer](https://github.com/kyosek/CFXplorer) for implementation), 
+    - FeatureTweak (implementation used from [featureTweakPy](https://github.com/upura/featureTweakPy/blob/master/featureTweakPy.py)), 
+    - [Support for SKLearn tree based classifiers.]
 
 Conformal prediction overview:
 - `SplitConformalPrediction`: Vanilla split conformal prediction
 - `BaseLCP`: Localised conformal prediction (see [Guan, 2021](https://arxiv.org/abs/2106.08460))
 - `ConformalCONFEXTree`: Localised CP via CONFEXTree, see [1]
 - Registries for score functions and kernel functions
-- `losses_conformal`: Smooth set size losses from Stutz et. al. "Learning optimal conformal classifiers." (2021), for use in gradient-based generators that utilise conformal prediction.
+- `losses_conformal`: Smooth set size losses from [Stutz et. al. 2022](https://arxiv.org/abs/2110.09192), for use in gradient-based generators that utilise conformal prediction.
 
 Benchmarking overview:
 - `CFBenchmarker` allows you to specify a dataset, the scale of benchmark (number of test points), metrics to use, models to use and generators to benchmark. See usage in `results/`
@@ -118,10 +125,10 @@ Benchmarking overview:
 ## Extensions
 
 This library is being extended to include:
-1. More generators, including REVISE (see WIP: branch ) and FACE.
+1. More generators, including REVISE (WIP: branch [revise-generator](https://github.com/ABilkhoo/pycfx/tree/revise-generator) ) and FACE.
 2. More models and CFX generators that support those models (e.g. XGBoost models)
-3. More localised conformal prediction methods e.g. CQC, SLCP, LoCart (see WIP)
-4. Potential extension of the CONFEX method [1] to differentiable models (see WIP)
+3. More localised conformal prediction methods for comparison e.g. CQC, SLCP, LoCart (WIP: branch [other-localised-conformal](https://github.com/ABilkhoo/pycfx/tree/other-localised-conformal))
+4. Potential extension of the CONFEX method [1] to differentiable models (WIP: branch [differentiable-confex](https://github.com/ABilkhoo/pycfx/tree/differentiable-confex))
 ...
 
 ## License
