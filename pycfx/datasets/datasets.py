@@ -71,7 +71,7 @@ class Dataset(ABC):
 
         return self.X_train, self.y_train, self.X_calib, self.y_calib, self.X_test, self.y_test
     
-    def median_pairwise_distances(self, data: np.ndarray) -> np.float_:
+    def median_pairwise_distances(self, data: np.ndarray) -> np.float32:
         """
         Helper to obtain the median pairwise distance of all elements in the dataset
         """
@@ -178,7 +178,7 @@ class Dataset(ABC):
         self.calib_indices = np.arange(train_len, train_len + calib_len)
         self.test_indices = np.arange(train_len + calib_len, data_len)
 
-    def get_ord_bounds(df, key) -> List[np.float_]:
+    def get_ord_bounds(df, key) -> List[np.float32]:
         """
         Helper to get the possible values a possible ordinal feature `key` can hold, through observation in `df`.
         """

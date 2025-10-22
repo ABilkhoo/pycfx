@@ -8,7 +8,7 @@ from pycfx.conformal.split_conformal import SplitConformalPrediction
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
-def compute_stats(alpha: np.float_, pred_intervals: np.ndarray, y_correct: np.ndarray, indices: np.ndarray=None, cov_gap: bool=False) -> tuple[float, float]:
+def compute_stats(alpha: np.float32, pred_intervals: np.ndarray, y_correct: np.ndarray, indices: np.ndarray=None, cov_gap: bool=False) -> tuple[float, float]:
         """
         Compute set size and coverage for given prediction intervals and target classes.
 
@@ -48,7 +48,7 @@ def compute_stats(alpha: np.float_, pred_intervals: np.ndarray, y_correct: np.nd
 
         return set_size, coverage
     
-def compute_stats_partition(alpha: np.float_, set_sizes: list, coverage: list, partition_sizes: list, only_penalise_undercoverage: bool=False, cov_gap: bool=False) -> tuple[float, float]:
+def compute_stats_partition(alpha: np.float32, set_sizes: list, coverage: list, partition_sizes: list, only_penalise_undercoverage: bool=False, cov_gap: bool=False) -> tuple[float, float]:
     """
         Given a partitioned scenario test set, each providing an average set size and coverage rate, compute an overall set size and coverage gap
 

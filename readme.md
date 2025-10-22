@@ -18,7 +18,7 @@ See the example notebooks to get started! View the documentation here.
 - [Quick start](#quick-start)
 - [Project structure](#project-structure)
 - [Datasets & Models](#datasets--models)
-- [License & Contact](#license--contact)
+- [License](#license)
 
 ---
 
@@ -117,8 +117,8 @@ Benchmarking overview:
 
 ## Extensions
 
-This library is being extended to include...:
-1. More generators, including REVISE (see WIP) and FACE.
+This library is being extended to include:
+1. More generators, including REVISE (see WIP: branch ) and FACE.
 2. More models and CFX generators that support those models (e.g. XGBoost models)
 3. More localised conformal prediction methods e.g. CQC, SLCP, LoCart (see WIP)
 4. Potential extension of the CONFEX method [1] to differentiable models (see WIP)

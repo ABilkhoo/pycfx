@@ -23,7 +23,7 @@ def register_kernel(key: str):
     return decorator
 
 
-def get_kernel(key: str) -> Callable[[np.float_, np.float_, np.float_, InputProperties], np.float_]:
+def get_kernel(key: str) -> Callable[[np.float32, np.float32, np.float32, InputProperties], np.float32]:
     """
     Obtain a with key from the registry
     """

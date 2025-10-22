@@ -78,7 +78,7 @@ def generate_grid_points(input_properties: InputProperties, X: np.ndarray, dim_r
 
     return grid_points
 
-def median_pairwise_distances(X: np.ndarray, dim_reduction: DimensionalityReduction = None) -> np.float_:
+def median_pairwise_distances(X: np.ndarray, dim_reduction: DimensionalityReduction = None) -> np.float32:
     """
     Compute the median of pairwise distances of points X (potentially after dimensionality reduction with dim_reduction)
     """

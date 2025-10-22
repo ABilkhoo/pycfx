@@ -93,7 +93,7 @@ class SplitConformalPrediction:
         self.scores = scores
         return self.scores
 
-    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float_:
+    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float32:
         """
         Calibrate the SplitConformalPrediction instance using calibration data (X_calib, y_calib), returns the quantile value. test_point is ignored.
         """

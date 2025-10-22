@@ -206,8 +206,8 @@ class CONFEXTreeNode:
             'children_left': np.array(children_left, dtype=np.int64),
             'children_right': np.array(children_right, dtype=np.int64),
             'feature': np.array(feature, dtype=np.int64),
-            'threshold': np.array(threshold, dtype=np.float64),
-            'value': np.array(value, dtype=np.float64),
+            'threshold': np.array(threshold, dtype=np.float32),
+            'value': np.array(value, dtype=np.float32),
             'capacity': len(children_left),
             'n_features': self.n_dims
         }
@@ -269,7 +269,7 @@ class ConformalCONFEXTree(SplitConformalPrediction):
         assert self.is_calibrated
         return self.trees
 
-    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float_:
+    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float32:
         """
         Calibrate the CONFEX tree using calibration data and scores.
         """

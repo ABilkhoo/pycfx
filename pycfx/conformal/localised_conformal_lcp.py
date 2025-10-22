@@ -52,7 +52,7 @@ class BaseLCP(SplitConformalPrediction):
         self.y_calib = None
         self.X_calib_encoded = None
 
-    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float_:
+    def calibrate(self, X_calib: np.ndarray, y_calib: np.ndarray, test_point: np.ndarray=None) -> np.float32:
         """
         Calibrate the conformal predictor around the `test_point` by taking the weighted quantile according to the specified kernel_name, kernel_bandwidth, kernel_bandwidth_scaling and optional dim_reduction.
         """
