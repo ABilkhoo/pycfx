@@ -2,31 +2,27 @@
 
 PyCFX is a library for generating counterfactual explanations for trained models in Python, and benchmarking counterfactual explanation generators.
 
-With machine learning models being increasingly deployed in high-stakes scenarios affecting individuals, algorithmic recourse - providing actionable feedback to individuals influenced by these decisions - is crucial. For an individual `x` for which a given model `f` does not predict the desired class, e.g. the model rejects the individual from obtaining a loan given features such as income, age, etc., the a counterfactual explanation (CFX) provides a modified `x'` for which the model `f` does predict the target class, e.g. a generator may find the closest such `x'`. Further desiderata for CFXs include sparsity, diversity, causality, actionability, and plausibility.
+With machine learning models being increasingly deployed in high-stakes scenarios affecting individuals, algorithmic recourse - providing actionable feedback to individuals influenced by these decisions - is crucial. For an individual $x$ for which a given model $f$ does not predict the desired class $f(x) \neq y^+$, e.g. the model rejects the individual from obtaining a loan given features such as income, age, etc., the a counterfactual explanation (CFX) provides a modified $x'$ for which the model $f$ does predict the target class, e.g. a generator may find the closest such $x'$. Initially fomulated by Wachter (2017), desiderata for CFXs have been extended to include low uncertainty, sparsity, diversity, causality, actionability, and plausibility.
 
 PyCFX includes a range of CFX generators and has out-of-the-box support for a range of models and CFX generators. PyCFX is fully documented, built to be extendable by those wishing to benchmark their own CFX generator or use their own models or datasets, or use custom metrics to benchmark generators with. In comparison with existing libraries, PyCFX is built to include proper handling of numeric, categorical and ordinal features, has support for MILP (mixed-integer linear programming) based generators, and includes conformal prediction for uncertainty quantification.
 
 See the example notebooks to get started! 
 View the documentation [here](https://abilkhoo.github.io/pycfx/).
 
---
-
 ## Table of contents
 
 - [Overview](#overview)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
+- [Requirements and Installation](#requirements-and-installation)
 - [Quick start](#quick-start)
 - [Project structure](#project-structure)
-- [Datasets & Models](#datasets--models)
+- [Datasets, Models and Generators](#datasets-models-and-generators)
+- [Extensions](#extensions)
 - [License](#license)
-
----
 
 ## Overview
 
-PyCFX was developed for use by Aman Bilkhoo for use in the paper "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees" [1]
+PyCFX was developed for use by Aman Bilkhoo for to generate results in the paper ["CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees"](https://arxiv.org/abs/2510.19754).
+
 This library contains
 - Sample synthetic and tabular datasets
 - Model wrappers for PyTorch models, Keras models and SKLearn tree-based classifiers.
@@ -39,10 +35,10 @@ This library contains
 For reporting bugs, issues and feature requests please open an issue.
 
 
-## Requirements
+## Requirements and Installation
 - Python: 3.10
 - See `requirements.txt` for dependencies.
-- Install by cloning the repo, then quick start with the tutorial notebooks. The library will be made available via PyPi in a future release.
+- Install by from source cloning the repo, then quick start with the tutorial notebooks. The library will be made available via PyPi in a future release.
 
 Note that for MILP-based generators make use of `gurobipy`, which requires a Gurobi licence to be available on your system. See [here](https://support.gurobi.com/hc/en-us/articles/12872879801105-How-do-I-retrieve-and-set-up-a-Gurobi-license) for further details.
 
@@ -68,15 +64,15 @@ pycfx/
 
 ```
 
-See `results/readme.md` to reproduce the results from "CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees"
+See `results/readme.md` to reproduce the results from ["CONFEX: Uncertainty-Aware Counterfactual Explanations with Conformal Guarantees"](https://arxiv.org/abs/2510.19754)
 
 ## Datasets, Models and Generators.
 
-Datasets overview:
-- `CaliforniaHousing` — Pace, R. Kelley and Ronald Barry, Sparse Spatial Autoregressions, Statistics and Probability Letters, 33 (1997) 291-297
-- `GermanCredit` — Hofmann, H. (1994). Statlog (German Credit Data) [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5NC77.
-- `GiveMeSomeCredit` - Credit Fusion and Will Cukierski. Give Me Some Credit. https://kaggle.com/competitions/GiveMeSomeCredit, 2011. Kaggle.
-- `AdultIncome` — Becker, B. & Kohavi, R. (1996). Adult [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.
+Datasets included out-of-the-box include the following, plus you can bring your own dataset.
+- `CaliforniaHousing` — Pace, R. Kelley and Ronald Barry, Sparse Spatial Autoregressions, Statistics and Probability Letters, 33 (1997) 291-297. [source](https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html).
+- `GermanCredit` — Hofmann, H. (1994). Statlog (German Credit Data) [Dataset]. UCI Machine Learning Repository. [source](https://doi.org/10.24432/C5NC77.).
+- `GiveMeSomeCredit` - Credit Fusion and Will Cukierski. Give Me Some Credit, 2011. Kaggle. [source](https://kaggle.com/competitions/GiveMeSomeCredit).
+- `AdultIncome` — Becker, B. & Kohavi, R. (1996). Adult [Dataset]. UCI Machine Learning Repository. [source](https://doi.org/10.24432/C5XW20.).
 - Synthetic models
     - `SyntheticLinearlySeparable`
     - `SyntheticMulticlass`
@@ -90,7 +86,8 @@ Models available:
 - `KerasMLP`, MLP using Keras. For further customisation, you can subclass `KerasModel`
 - `RandomForestSKLearn`, `GradientBoostingSKLearn`, `DecisionTreeSKLearn`: SKLearn tree based classifiers
 - Use the in-built training methods to train these models, or use `.load`/`.load_external` to point the wrapper to your pre-trained model file/object.
-- Subclass `AbstractModel` to define your own model
+- You can train and test all within this framework, or load a pre-trained model into these wrappers.
+- You can subclass `AbstractModel` to define your own model architecture.
 
 Generators available:
 - Differentiable generators:
@@ -100,15 +97,16 @@ Generators available:
     - [Support for PyTorch/Keras models].
 - MILP-based generators:
     - Min Distance CFX generator
-    - CONFEX generator [1]
-    - [Support for PyTorch/Keras MLP and tree-based models]
+    - [CONFEX generators](https://arxiv.org/abs/2510.19754)
+    - [Support for PyTorch/Keras MLP and tree-based models].
 - Other: 
     - Nearest-neighbour CFX,
     - [Support for all models].
 - External: 
     - FOCUS (uses [CFXplorer](https://github.com/kyosek/CFXplorer) for implementation), 
     - FeatureTweak (implementation used from [featureTweakPy](https://github.com/upura/featureTweakPy/blob/master/featureTweakPy.py)), 
-    - [Support for SKLearn tree based classifiers.]
+    - [Support for SKLearn tree based classifiers].
+- You can extend `CounterfactualGenerator` or `GradientBasedGenerator` to define your own generator
 
 Conformal prediction overview:
 - `SplitConformalPrediction`: Vanilla split conformal prediction
@@ -128,7 +126,7 @@ This library is being extended to include:
 1. More generators, including REVISE (WIP: branch [revise-generator](https://github.com/ABilkhoo/pycfx/tree/revise-generator) ) and FACE.
 2. More models and CFX generators that support those models (e.g. XGBoost models)
 3. More localised conformal prediction methods for comparison e.g. CQC, SLCP, LoCart (WIP: branch [other-localised-conformal](https://github.com/ABilkhoo/pycfx/tree/other-localised-conformal))
-4. Potential extension of the CONFEX method [1] to differentiable models (WIP: branch [differentiable-confex](https://github.com/ABilkhoo/pycfx/tree/differentiable-confex))
+4. Potential extension of the [CONFEX method](https://arxiv.org/abs/2510.19754) to differentiable models (WIP: branch [differentiable-confex](https://github.com/ABilkhoo/pycfx/tree/differentiable-confex))
 ...
 
 ## License

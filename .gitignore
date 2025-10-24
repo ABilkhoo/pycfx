@@ -221,3 +221,4 @@ pyrightconfig.json
 *.out
 
 .vscode
+docs
